@@ -6026,7 +6026,6 @@ function plotUMAPmet(data, fechaInicio, fechaFin) {
 
 
 
-
 function updateCorrelationMatrixnew(dates) {
     console.log("FECHAS DE LA MATRIZ NEW", dates);
     const selectedAttributes = Array.from(document.querySelectorAll('.options-chek-correlation input[type="checkbox"]:checked'))
