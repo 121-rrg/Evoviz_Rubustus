@@ -6887,6 +6887,7 @@ function plotTimeSeries(attribute, data) {
 }
 
 // Gráfico de distribución espacio-temporal
+
 const stations = [
     "Aotizhongxin", "Changping", "Dongsi", "Guanyuan", "Gucheng", 
     "Nongzhanguan", "Tiantan", "Wanliu", "Wanshouxigong", 
@@ -6919,42 +6920,42 @@ function updateStationBarCharts() {
     const aqiColors = ['#00e400', '#ff0', '#ff7e00', '#f00', '#99004c', '#7e0023'];
 
     const allRanges = [];
-    allRanges.push({ season: 'Invierno', start: new Date(2013, 2, 1), end: new Date(2013, 2, 19) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 2, 20), end: new Date(2013, 2, 31) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 3, 1), end: new Date(2013, 3, 30) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 4, 1), end: new Date(2013, 4, 31) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 5, 1), end: new Date(2013, 5, 20) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 5, 21), end: new Date(2013, 5, 30) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 6, 1), end: new Date(2013, 6, 31) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 7, 1), end: new Date(2013, 7, 31) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 8, 1), end: new Date(2013, 8, 22) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 8, 23), end: new Date(2013, 8, 30) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 9, 1), end: new Date(2013, 9, 31) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 10, 1), end: new Date(2013, 10, 30) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 11, 1), end: new Date(2013, 11, 21) });
-    allRanges.push({ season: 'Invierno', start: new Date(2013, 11, 22), end: new Date(2013, 11, 31) });
+    allRanges.push({ season: 'Invierno', start: new Date(2013, 2, 1), end: new Date(2013, 2, 19), days: 19 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 2, 20), end: new Date(2013, 2, 31), days: 12 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 3, 1), end: new Date(2013, 3, 30), days: 30 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 4, 1), end: new Date(2013, 4, 31), days: 31 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 5, 1), end: new Date(2013, 5, 20), days: 20 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 5, 21), end: new Date(2013, 5, 30), days: 10 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 6, 1), end: new Date(2013, 6, 31), days: 31 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 7, 1), end: new Date(2013, 7, 31), days: 31 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 8, 1), end: new Date(2013, 8, 22), days: 22 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 8, 23), end: new Date(2013, 8, 30), days: 8 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 9, 1), end: new Date(2013, 9, 31), days: 31 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 10, 1), end: new Date(2013, 10, 30), days: 30 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 11, 1), end: new Date(2013, 11, 21), days: 21 });
+    allRanges.push({ season: 'Invierno', start: new Date(2013, 11, 22), end: new Date(2013, 11, 31), days: 10 });
 
     for (let year = 2014; year <= 2016; year++) {
-        allRanges.push({ season: 'Invierno', start: new Date(year, 0, 1), end: new Date(year, 0, 31) });
-        allRanges.push({ season: 'Invierno', start: new Date(year, 1, 1), end: new Date(year, 1, year % 4 === 0 ? 29 : 28) });
-        allRanges.push({ season: 'Invierno', start: new Date(year, 2, 1), end: new Date(year, 2, 19) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 2, 20), end: new Date(year, 2, 31) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 3, 1), end: new Date(year, 3, 30) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 4, 1), end: new Date(year, 4, 31) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 5, 1), end: new Date(year, 5, 20) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 5, 21), end: new Date(year, 5, 30) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 6, 1), end: new Date(year, 6, 31) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 7, 1), end: new Date(year, 7, 31) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 8, 1), end: new Date(year, 8, 22) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 8, 23), end: new Date(year, 8, 30) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 9, 1), end: new Date(year, 9, 31) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 10, 1), end: new Date(year, 10, 30) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 11, 1), end: new Date(year, 11, 21) });
-        allRanges.push({ season: 'Invierno', start: new Date(year, 11, 22), end: new Date(year, 11, 31) });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 0, 1), end: new Date(year, 0, 31), days: 31 });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 1, 1), end: new Date(year, 1, year % 4 === 0 ? 29 : 28), days: year % 4 === 0 ? 29 : 28 });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 2, 1), end: new Date(year, 2, 19), days: 19 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 2, 20), end: new Date(year, 2, 31), days: 12 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 3, 1), end: new Date(year, 3, 30), days: 30 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 4, 1), end: new Date(year, 4, 31), days: 31 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 5, 1), end: new Date(year, 5, 20), days: 20 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 5, 21), end: new Date(year, 5, 30), days: 10 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 6, 1), end: new Date(year, 6, 31), days: 31 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 7, 1), end: new Date(year, 7, 31), days: 31 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 8, 1), end: new Date(year, 8, 22), days: 22 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 8, 23), end: new Date(year, 8, 30), days: 8 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 9, 1), end: new Date(year, 9, 31), days: 31 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 10, 1), end: new Date(year, 10, 30), days: 30 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 11, 1), end: new Date(year, 11, 21), days: 21 });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 11, 22), end: new Date(year, 11, 31), days: 10 });
     }
 
-    allRanges.push({ season: 'Invierno', start: new Date(2017, 0, 1), end: new Date(2017, 0, 31) });
-    allRanges.push({ season: 'Invierno', start: new Date(2017, 1, 1), end: new Date(2017, 1, 28) });
+    allRanges.push({ season: 'Invierno', start: new Date(2017, 0, 1), end: new Date(2017, 0, 31), days: 31 });
+    allRanges.push({ season: 'Invierno', start: new Date(2017, 1, 1), end: new Date(2017, 1, 28), days: 28 });
 
     allRanges.sort((a, b) => a.start - b.start);
 
@@ -6983,7 +6984,7 @@ function updateStationBarCharts() {
             const filteredData = selectedDataForTimeSeries ? selectedDataForTimeSeries.filter(item => 
                 item.date >= range.start && item.date <= range.end && item.station === station
             ) : [];
-            counts[station][range.label] = filteredData.length;
+            counts[station][range.label] = filteredData.length; // Number of days with data
             const sumAQI = filteredData.reduce((sum, item) => sum + (item.AQI || 0), 0);
             const AQI_avg = filteredData.length > 0 ? Math.round(sumAQI / filteredData.length) : 0;
             aqiAverages[station][range.label] = AQI_avg;
@@ -7029,7 +7030,7 @@ function updateStationBarCharts() {
             .text(stationAbbreviations[station]);
 
         const isLastStation = index === totalStations - 1;
-        const svgHeight = isLastStation ? 100 : 50;
+        const svgHeight = isLastStation ? 130 : 70; // Increased height for taller bars
 
         const svg = stationDiv.append("svg")
             .attr("width", 800)
@@ -7038,7 +7039,8 @@ function updateStationBarCharts() {
 
         const data = allRanges.map(range => ({
             label: range.label,
-            count: counts[station][range.label],
+            daysWithData: counts[station][range.label], // Number of days with data
+            totalDays: range.days, // Total days in the period
             year: range.year,
             season: range.season,
             aqiAvg: aqiAverages[station][range.label]
@@ -7056,8 +7058,9 @@ function updateStationBarCharts() {
             .range([0, width])
             .padding(0.02);
 
+        const maxDays = 31; // Maximum number of days in any period
         const y = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.count) || 31])
+            .domain([0, maxDays]) // Scale based on maximum possible days
             .range([height, 0]);
 
         g.selectAll(".season-background")
@@ -7078,9 +7081,9 @@ function updateStationBarCharts() {
             .append("rect")
             .attr("class", "bar")
             .attr("x", d => x(d.label))
-            .attr("y", d => y(d.count))
+            .attr("y", d => y(d.daysWithData))
             .attr("width", x.bandwidth())
-            .attr("height", d => height - y(d.count))
+            .attr("height", d => height - y(d.daysWithData))
             .attr("fill", d => {
                 if (d.aqiAvg === 0) {
                     return "white";
@@ -7095,8 +7098,8 @@ function updateStationBarCharts() {
                 const AQI_avg = d.aqiAvg === 0 ? "No data" : d.aqiAvg;
                 tooltip.style("visibility", "visible")
                     .html(`<strong>Distrito:</strong> ${station}<br>
-                           <strong>Días:</strong> ${d.count} <br>
-                           <strong>Temporada:</strong> ${d.label} <br>
+                           <strong>Días con datos:</strong> ${d.daysWithData} de ${d.totalDays}<br>
+                           <strong>Temporada:</strong> ${d.label}<br>
                            <strong>Promedio AQI:</strong> ${AQI_avg}`);
             })
             .on("mousemove", function (event) {
@@ -7213,6 +7216,7 @@ function updateStationBarCharts() {
         }
     });
 }
+
 
 // Placeholder para la función generateStackedBarPlot
 function generateStackedBarPlot(data, station, range) {
