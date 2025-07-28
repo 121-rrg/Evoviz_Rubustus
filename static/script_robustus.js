@@ -2661,6 +2661,7 @@ let isGraphLocked3 = false; // Inicialmente, la gráfica está desbloqueada.
 let isGraphLocked_boton = true;
 let isGraphLocked_boton2 = true;
 
+
 function plotUMAP(data, fechaInicio, fechaFin) {
 
     d3.select("#umap-plot-fusion").selectAll("*").remove();
@@ -3495,8 +3496,8 @@ function plotUMAP(data, fechaInicio, fechaFin) {
         updateCorrelationMatrixnew(selectedDates);
         drawThemeRiver(cityFile, selectedDates);
         updateRadialChartWithSelection(selectionData, fechaInicio, fechaFin);
-        plotUMAPcontCluster(filteredDataCont, fechaInicio, fechaFin, selectedDates, "blue");
-        plotUMAPmetCluster(filterDataMet, fechaInicio, fechaFin, selectedDates, "blue");
+        plotUMAPcontCluster(filteredDataCont, fechaInicio, fechaFin, selectedDates, "aqi");
+        plotUMAPmetCluster(filterDataMet, fechaInicio, fechaFin, selectedDates, "aqi");
         // Restaurar todos los puntos a su estado original antes de aplicar cambios a los puntos seleccionados
         svg.selectAll("circle")
             .attr("r", 6)  // Restaurar el radio original de los puntos (ajusta según el tamaño original)
@@ -3711,6 +3712,15 @@ function plotUMAPmetCluster(data, fechaInicio, fechaFin, clusterDates, clusterCo
         .style("font-size", "12px");
 
     // Dibujar los puntos
+    // Colores para AQI
+    const aqiColors = {
+        1: '#00E400', // Bueno
+        2: '#FFFF00', // Moderado
+        3: '#FF7E00', // Insalubre
+        4: '#FF0000', // Muy Insalubre
+        5: '#99004c', // Malo
+        6: '#800000', // Severo
+    };
     svg.selectAll("circle")
         .data(data)
         .enter()
@@ -3718,9 +3728,19 @@ function plotUMAPmetCluster(data, fechaInicio, fechaFin, clusterDates, clusterCo
         .attr("cx", d => xScale(d.UMAP1))
         .attr("cy", d => yScale(d.UMAP2))
         .attr("r", 5)
-        .attr("fill", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? clusterColor : "steelblue") // Usar el color del cluster
-        .attr("opacity", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0.2) // Opacidad baja si no está en clusterDates
-        .attr("stroke", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? "black" : "none") // Borde negro si está en clusterDates
+        .attr("fill", d => {
+            if (clusterDateSet.has(`${d.year}-${d.month}-${d.day}`)) {
+                if (clusterColor === "aqi") {
+                    return aqiColors[d.AQI] || "#000";
+                } else {
+                    return clusterColor;
+                }
+            } else {
+                return "steelblue";
+            }
+        })
+        .attr("opacity", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0.2)
+        .attr("stroke", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? "black" : "none")
         .attr("stroke-width", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0)
         .on("mouseover", function (event, d) {
             tooltip.style("visibility", "visible")
@@ -3729,7 +3749,6 @@ function plotUMAPmetCluster(data, fechaInicio, fechaFin, clusterDates, clusterCo
                     <strong>Fecha:</strong> ${d.day}/${d.month}/${d.year}<br>
                     <strong>AQI:</strong> ${d.AQI}
                 `);
-
             d3.select(this)
                 .attr("r", 10)
                 .attr("stroke-width", 3);
@@ -3740,7 +3759,6 @@ function plotUMAPmetCluster(data, fechaInicio, fechaFin, clusterDates, clusterCo
         })
         .on("mouseout", function (event, d) {
             tooltip.style("visibility", "hidden");
-
             d3.select(this)
                 .attr("r", 6)
                 .attr("stroke-width", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0); 
@@ -3883,6 +3901,15 @@ function plotUMAPfusionCluster(data, fechaInicio, fechaFin, clusterDates, cluste
         .style("font-size", "12px");
 
     // Dibujar los puntos
+    // Colores para AQI
+    const aqiColors = {
+        1: '#00E400', // Bueno
+        2: '#FFFF00', // Moderado
+        3: '#FF7E00', // Insalubre
+        4: '#FF0000', // Muy Insalubre
+        5: '#99004c', // Malo
+        6: '#800000', // Severo
+    };
     svg.selectAll("circle")
         .data(data)
         .enter()
@@ -3890,9 +3917,19 @@ function plotUMAPfusionCluster(data, fechaInicio, fechaFin, clusterDates, cluste
         .attr("cx", d => xScale(d.UMAP1))
         .attr("cy", d => yScale(d.UMAP2))
         .attr("r", 5)
-        .attr("fill", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? clusterColor : "steelblue") // Usar el color del cluster
-        .attr("opacity", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0.2) // Opacidad baja si no está en clusterDates
-        .attr("stroke", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? "black" : "none") // Borde negro si está en clusterDates
+        .attr("fill", d => {
+            if (clusterDateSet.has(`${d.year}-${d.month}-${d.day}`)) {
+                if (clusterColor === "aqi") {
+                    return aqiColors[d.AQI] || "#000";
+                } else {
+                    return clusterColor;
+                }
+            } else {
+                return "steelblue";
+            }
+        })
+        .attr("opacity", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0.2)
+        .attr("stroke", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? "black" : "none")
         .attr("stroke-width", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0)
         .on("mouseover", function (event, d) {
             tooltip.style("visibility", "visible")
@@ -3901,7 +3938,6 @@ function plotUMAPfusionCluster(data, fechaInicio, fechaFin, clusterDates, cluste
                     <strong>Fecha:</strong> ${d.day}/${d.month}/${d.year}<br>
                     <strong>AQI:</strong> ${d.AQI}
                 `);
-
             d3.select(this)
                 .attr("r", 10)
                 .attr("stroke-width", 3);
@@ -3912,7 +3948,6 @@ function plotUMAPfusionCluster(data, fechaInicio, fechaFin, clusterDates, cluste
         })
         .on("mouseout", function (event, d) {
             tooltip.style("visibility", "hidden");
-
             d3.select(this)
                 .attr("r", 6)
                 .attr("stroke-width", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0); 
@@ -4066,6 +4101,15 @@ function plotUMAPcontCluster(data, fechaInicio, fechaFin, clusterDates, clusterC
         .style("font-size", "12px");
 
     // Dibujar los puntos
+    // Colores para AQI
+    const aqiColors = {
+        1: '#00E400', // Bueno
+        2: '#FFFF00', // Moderado
+        3: '#FF7E00', // Insalubre
+        4: '#FF0000', // Muy Insalubre
+        5: '#99004c', // Malo
+        6: '#800000', // Severo
+    };
     svg.selectAll("circle")
         .data(data)
         .enter()
@@ -4073,7 +4117,17 @@ function plotUMAPcontCluster(data, fechaInicio, fechaFin, clusterDates, clusterC
         .attr("cx", d => xScale(d.UMAP1))
         .attr("cy", d => yScale(d.UMAP2))
         .attr("r", 6)
-        .attr("fill", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? clusterColor : "steelblue")
+        .attr("fill", d => {
+            if (clusterDateSet.has(`${d.year}-${d.month}-${d.day}`)) {
+                if (clusterColor === "aqi") {
+                    return aqiColors[d.AQI] || "#000";
+                } else {
+                    return clusterColor;
+                }
+            } else {
+                return "steelblue";
+            }
+        })
         .attr("opacity", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0.2)
         .attr("stroke", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? "black" : "none")
         .attr("stroke-width", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0)
@@ -4084,7 +4138,6 @@ function plotUMAPcontCluster(data, fechaInicio, fechaFin, clusterDates, clusterC
                     <strong>Fecha:</strong> ${d.day}/${d.month}/${d.year}<br>
                     <strong>AQI:</strong> ${d.AQI}
                 `);
-
             d3.select(this)
                 .attr("r", 10)
                 .attr("stroke-width", 3);
@@ -4095,7 +4148,6 @@ function plotUMAPcontCluster(data, fechaInicio, fechaFin, clusterDates, clusterC
         })
         .on("mouseout", function (event, d) {
             tooltip.style("visibility", "hidden");
-
             d3.select(this)
                 .attr("r", 6)
                 .attr("stroke-width", d => clusterDateSet.has(`${d.year}-${d.month}-${d.day}`) ? 1 : 0); 
@@ -5002,8 +5054,8 @@ function plotUMAPcont(data, fechaInicio, fechaFin) {
         updateCorrelationMatrixnew(selectedDates);
         drawThemeRiver(cityFile, selectedDates);
         updateRadialChartWithSelection(selectionData, fechaInicio, fechaFin);
-        plotUMAPfusionCluster(filterDataFusion, fechaInicio, fechaFin, selectedDates, "blue");
-        plotUMAPmetCluster(filterDataMet, fechaInicio, fechaFin, selectedDates, "blue");
+        plotUMAPfusionCluster(filterDataFusion, fechaInicio, fechaFin, selectedDates, "aqi");
+        plotUMAPmetCluster(filterDataMet, fechaInicio, fechaFin, selectedDates, "aqi");
         // Restaurar todos los puntos a su estado original antes de aplicar cambios a los puntos seleccionados
         svg.selectAll("circle")
             .attr("r", 6)  // Restaurar el radio original de los puntos (ajusta según el tamaño original)
@@ -5946,8 +5998,8 @@ function plotUMAPmet(data, fechaInicio, fechaFin) {
         updateCorrelationMatrixnew(selectedDates);
         drawThemeRiver(cityFile, selectedDates);
         updateRadialChartWithSelection(selectionData, fechaInicio, fechaFin);
-        plotUMAPfusionCluster(filterDataFusion, fechaInicio, fechaFin, selectedDates, "blue");
-        plotUMAPcontCluster(filteredDataCont, fechaInicio, fechaFin, selectedDates, "blue");
+        plotUMAPfusionCluster(filterDataFusion, fechaInicio, fechaFin, selectedDates, "aqi");
+        plotUMAPcontCluster(filteredDataCont, fechaInicio, fechaFin, selectedDates, "aqi");
         svg.selectAll("circle")
             .attr("r", 6)  // Restaurar el radio original de los puntos (ajusta según el tamaño original)
             .attr("stroke", "none");  // Eliminar el borde azul
@@ -5971,7 +6023,6 @@ function plotUMAPmet(data, fechaInicio, fechaFin) {
  
 
 }
-
 
 
 
@@ -6837,7 +6888,6 @@ function plotTimeSeries(attribute, data) {
     console.log(`Plotting time series for ${attribute} with ${data.length} data points`);
 }
 
-// Gráfico de distribución espacio-temporal
 const stations = [
     "Aotizhongxin", "Changping", "Dongsi", "Guanyuan", "Gucheng", 
     "Nongzhanguan", "Tiantan", "Wanliu", "Wanshouxigong", 
@@ -6870,42 +6920,42 @@ function updateStationBarCharts() {
     const aqiColors = ['#00e400', '#ff0', '#ff7e00', '#f00', '#99004c', '#7e0023'];
 
     const allRanges = [];
-    allRanges.push({ season: 'Invierno', start: new Date(2013, 2, 1), end: new Date(2013, 2, 19) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 2, 20), end: new Date(2013, 2, 31) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 3, 1), end: new Date(2013, 3, 30) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 4, 1), end: new Date(2013, 4, 31) });
-    allRanges.push({ season: 'Primavera', start: new Date(2013, 5, 1), end: new Date(2013, 5, 20) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 5, 21), end: new Date(2013, 5, 30) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 6, 1), end: new Date(2013, 6, 31) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 7, 1), end: new Date(2013, 7, 31) });
-    allRanges.push({ season: 'Verano', start: new Date(2013, 8, 1), end: new Date(2013, 8, 22) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 8, 23), end: new Date(2013, 8, 30) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 9, 1), end: new Date(2013, 9, 31) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 10, 1), end: new Date(2013, 10, 30) });
-    allRanges.push({ season: 'Otoño', start: new Date(2013, 11, 1), end: new Date(2013, 11, 21) });
-    allRanges.push({ season: 'Invierno', start: new Date(2013, 11, 22), end: new Date(2013, 11, 31) });
+    allRanges.push({ season: 'Invierno', start: new Date(2013, 2, 1), end: new Date(2013, 2, 19), days: 19 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 2, 20), end: new Date(2013, 2, 31), days: 12 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 3, 1), end: new Date(2013, 3, 30), days: 30 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 4, 1), end: new Date(2013, 4, 31), days: 31 });
+    allRanges.push({ season: 'Primavera', start: new Date(2013, 5, 1), end: new Date(2013, 5, 20), days: 20 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 5, 21), end: new Date(2013, 5, 30), days: 10 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 6, 1), end: new Date(2013, 6, 31), days: 31 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 7, 1), end: new Date(2013, 7, 31), days: 31 });
+    allRanges.push({ season: 'Verano', start: new Date(2013, 8, 1), end: new Date(2013, 8, 22), days: 22 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 8, 23), end: new Date(2013, 8, 30), days: 8 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 9, 1), end: new Date(2013, 9, 31), days: 31 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 10, 1), end: new Date(2013, 10, 30), days: 30 });
+    allRanges.push({ season: 'Otoño', start: new Date(2013, 11, 1), end: new Date(2013, 11, 21), days: 21 });
+    allRanges.push({ season: 'Invierno', start: new Date(2013, 11, 22), end: new Date(2013, 11, 31), days: 10 });
 
     for (let year = 2014; year <= 2016; year++) {
-        allRanges.push({ season: 'Invierno', start: new Date(year, 0, 1), end: new Date(year, 0, 31) });
-        allRanges.push({ season: 'Invierno', start: new Date(year, 1, 1), end: new Date(year, 1, year % 4 === 0 ? 29 : 28) });
-        allRanges.push({ season: 'Invierno', start: new Date(year, 2, 1), end: new Date(year, 2, 19) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 2, 20), end: new Date(year, 2, 31) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 3, 1), end: new Date(year, 3, 30) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 4, 1), end: new Date(year, 4, 31) });
-        allRanges.push({ season: 'Primavera', start: new Date(year, 5, 1), end: new Date(year, 5, 20) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 5, 21), end: new Date(year, 5, 30) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 6, 1), end: new Date(year, 6, 31) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 7, 1), end: new Date(year, 7, 31) });
-        allRanges.push({ season: 'Verano', start: new Date(year, 8, 1), end: new Date(year, 8, 22) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 8, 23), end: new Date(year, 8, 30) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 9, 1), end: new Date(year, 9, 31) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 10, 1), end: new Date(year, 10, 30) });
-        allRanges.push({ season: 'Otoño', start: new Date(year, 11, 1), end: new Date(year, 11, 21) });
-        allRanges.push({ season: 'Invierno', start: new Date(year, 11, 22), end: new Date(year, 11, 31) });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 0, 1), end: new Date(year, 0, 31), days: 31 });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 1, 1), end: new Date(year, 1, year % 4 === 0 ? 29 : 28), days: year % 4 === 0 ? 29 : 28 });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 2, 1), end: new Date(year, 2, 19), days: 19 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 2, 20), end: new Date(year, 2, 31), days: 12 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 3, 1), end: new Date(year, 3, 30), days: 30 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 4, 1), end: new Date(year, 4, 31), days: 31 });
+        allRanges.push({ season: 'Primavera', start: new Date(year, 5, 1), end: new Date(year, 5, 20), days: 20 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 5, 21), end: new Date(year, 5, 30), days: 10 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 6, 1), end: new Date(year, 6, 31), days: 31 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 7, 1), end: new Date(year, 7, 31), days: 31 });
+        allRanges.push({ season: 'Verano', start: new Date(year, 8, 1), end: new Date(year, 8, 22), days: 22 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 8, 23), end: new Date(year, 8, 30), days: 8 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 9, 1), end: new Date(year, 9, 31), days: 31 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 10, 1), end: new Date(year, 10, 30), days: 30 });
+        allRanges.push({ season: 'Otoño', start: new Date(year, 11, 1), end: new Date(year, 11, 21), days: 21 });
+        allRanges.push({ season: 'Invierno', start: new Date(year, 11, 22), end: new Date(year, 11, 31), days: 10 });
     }
 
-    allRanges.push({ season: 'Invierno', start: new Date(2017, 0, 1), end: new Date(2017, 0, 31) });
-    allRanges.push({ season: 'Invierno', start: new Date(2017, 1, 1), end: new Date(2017, 1, 28) });
+    allRanges.push({ season: 'Invierno', start: new Date(2017, 0, 1), end: new Date(2017, 0, 31), days: 31 });
+    allRanges.push({ season: 'Invierno', start: new Date(2017, 1, 1), end: new Date(2017, 1, 28), days: 28 });
 
     allRanges.sort((a, b) => a.start - b.start);
 
@@ -6934,7 +6984,7 @@ function updateStationBarCharts() {
             const filteredData = selectedDataForTimeSeries ? selectedDataForTimeSeries.filter(item => 
                 item.date >= range.start && item.date <= range.end && item.station === station
             ) : [];
-            counts[station][range.label] = filteredData.length;
+            counts[station][range.label] = filteredData.length; // Number of days with data
             const sumAQI = filteredData.reduce((sum, item) => sum + (item.AQI || 0), 0);
             const AQI_avg = filteredData.length > 0 ? Math.round(sumAQI / filteredData.length) : 0;
             aqiAverages[station][range.label] = AQI_avg;
@@ -6980,7 +7030,7 @@ function updateStationBarCharts() {
             .text(stationAbbreviations[station]);
 
         const isLastStation = index === totalStations - 1;
-        const svgHeight = isLastStation ? 100 : 50;
+        const svgHeight = isLastStation ? 130 : 70; // Increased height for taller bars
 
         const svg = stationDiv.append("svg")
             .attr("width", 800)
@@ -6989,7 +7039,8 @@ function updateStationBarCharts() {
 
         const data = allRanges.map(range => ({
             label: range.label,
-            count: counts[station][range.label],
+            daysWithData: counts[station][range.label], // Number of days with data
+            totalDays: range.days, // Total days in the period
             year: range.year,
             season: range.season,
             aqiAvg: aqiAverages[station][range.label]
@@ -7007,8 +7058,9 @@ function updateStationBarCharts() {
             .range([0, width])
             .padding(0.02);
 
+        const maxDays = 31; // Maximum number of days in any period
         const y = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.count) || 31])
+            .domain([0, maxDays]) // Scale based on maximum possible days
             .range([height, 0]);
 
         g.selectAll(".season-background")
@@ -7029,9 +7081,9 @@ function updateStationBarCharts() {
             .append("rect")
             .attr("class", "bar")
             .attr("x", d => x(d.label))
-            .attr("y", d => y(d.count))
+            .attr("y", d => y(d.daysWithData))
             .attr("width", x.bandwidth())
-            .attr("height", d => height - y(d.count))
+            .attr("height", d => height - y(d.daysWithData))
             .attr("fill", d => {
                 if (d.aqiAvg === 0) {
                     return "white";
@@ -7046,8 +7098,8 @@ function updateStationBarCharts() {
                 const AQI_avg = d.aqiAvg === 0 ? "No data" : d.aqiAvg;
                 tooltip.style("visibility", "visible")
                     .html(`<strong>Distrito:</strong> ${station}<br>
-                           <strong>Días:</strong> ${d.count} <br>
-                           <strong>Temporada:</strong> ${d.label} <br>
+                           <strong>Días con datos:</strong> ${d.daysWithData} de ${d.totalDays}<br>
+                           <strong>Temporada:</strong> ${d.label}<br>
                            <strong>Promedio AQI:</strong> ${AQI_avg}`);
             })
             .on("mousemove", function (event) {
